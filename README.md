@@ -7,7 +7,7 @@
 4️⃣ [Convention](#4️⃣-convention)<br/>
 
 ## 🏁 Kick Back
-![alt text](./Image/image.png)
+![alt text](./Images/image.png)
 
 ## 1️⃣ Description
 카트를 이용한 다양한 게임 모드들을 준비하였고 각 모드에 따라 특색있는 요소들이 존재하며 팀원 혹은 개인의 승리를 목표로 하는 레이싱 게임입니다.
