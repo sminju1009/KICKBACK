@@ -18,8 +18,8 @@ import ssafy.authserv.domain.record.repository.SoccerRecordRepository;
 import ssafy.authserv.domain.record.repository.SpeedRecordRepository;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,13 +50,31 @@ public class RankingServiceImpl implements RankingService {
     @Override
     @Transactional
     public Page<SpeedRankingInfo> getSpeedRanking(int mapNum, int pageNum){
-        Page<SpeedRecord> rankings = speedRecordRepository.findTopRecordsByMap(mapNum, PageRequest.of(pageNum, 10));
+        Page<SpeedRecord> rankings = speedRecordRepository.findSpeedRankingsByMap(mapNum, PageRequest.of(pageNum, 10));
 
-        int offset = pageNum * 10;
+//        int offset = pageNum * 10;
+        AtomicLong rankCounter = new AtomicLong(pageNum * 10L);
+//        return rankings.map(ranking -> {
+//            long rank = offset + rankings.getContent().indexOf(ranking) +1;
+//            return SpeedRankingInfo.convertToDTO(ranking.getMember(), rankingUtils.millisToString(ranking.getMillis()), rank);
+//        });
+
         return rankings.map(ranking -> {
-            int rank = offset + rankings.getContent().indexOf(ranking) +1;
+            long rank = rankCounter.getAndIncrement();
             return SpeedRankingInfo.convertToDTO(ranking.getMember(), rankingUtils.millisToString(ranking.getMillis()), rank);
         });
+    }
+
+    @Override
+    @Transactional
+    public List<SpeedRankingInfo> getAllSpeedRanking(int mapNum) {
+        List<SpeedRecord> rankings = speedRecordRepository.findAllSpeedRecordsByMap(mapNum);
+        AtomicLong rankCounter = new AtomicLong(1);
+
+        return rankings.stream().map(ranking -> {
+            long rank = rankCounter.getAndIncrement();
+            return SpeedRankingInfo.convertToDTO(ranking.getMember(), rankingUtils.millisToString(ranking.getMillis()), rank);
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -79,4 +97,5 @@ public class RankingServiceImpl implements RankingService {
 
        return new BetaSpeedRankingInfo(null, nickname, member.getProfileImage(), "기록이 없습니다.");
     }
+
 }

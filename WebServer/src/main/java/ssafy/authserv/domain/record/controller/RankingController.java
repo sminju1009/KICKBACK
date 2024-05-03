@@ -10,6 +10,8 @@ import ssafy.authserv.domain.record.entity.enums.MapType;
 import ssafy.authserv.domain.record.service.RankingService;
 import ssafy.authserv.global.common.dto.Message;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/ranking")
 @RequiredArgsConstructor
@@ -30,7 +32,15 @@ public class RankingController {
         return ResponseEntity.ok().body(rankingData);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/speed/all")
+    public ResponseEntity<List<SpeedRankingInfo>> getAllSpeedRanking(@RequestParam(defaultValue = "MEXICO") String mapName) {
+        int mapNum = MapType.getOrdinalByName(mapName.toUpperCase());
+        List<SpeedRankingInfo> rankingData = rankingService.getAllSpeedRanking(mapNum);
+
+        return ResponseEntity.ok().body(rankingData);
+    }
+
+    @GetMapping("/search1")
     public ResponseEntity<Message<BetaSpeedRankingInfo>> searchMemberRanking (@RequestParam(defaultValue = "0") int mapNum, @RequestParam String nickname) {
 
         BetaSpeedRankingInfo info = rankingService.getMemberSpeedRanking(mapNum, nickname);
@@ -38,7 +48,7 @@ public class RankingController {
         return ResponseEntity.ok().body(Message.success(info));
     }
 
-    @GetMapping("/search2")
+    @GetMapping("/search")
     public ResponseEntity<Message<BetaSpeedRankingInfo>> searchMemberRanking2 (@RequestParam(defaultValue = "Mexico") String mapName, @RequestParam String nickname) {
         int mapNum = MapType.getOrdinalByName(mapName);
 

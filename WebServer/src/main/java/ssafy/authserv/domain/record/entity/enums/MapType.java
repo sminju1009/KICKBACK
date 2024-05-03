@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MapType {
-    MEXICO("Mexico"), CEBU("Cebu"), UPHILL("Uphill");
+    MEXICO("Mexico"), CEBU("Cebu"), DOWNHILL("Downhill");
 
     private final String mapName;
 
@@ -26,5 +26,9 @@ public enum MapType {
         } catch (IllegalArgumentException e){
             throw new RuntimeException("Can't find the mapName: " + e);
         }
+    }
+
+    private MapType fromName(String mapName) {
+        return MapType.valueOf(mapName.toUpperCase());
     }
 }
