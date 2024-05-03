@@ -5,15 +5,16 @@ const LogoBox = styled.div`
   height: auto;
   text-align: center;
   position: relative;
-
+  margin-bottom: 50px;
   img {
-    width: 20%;
+    width: 40%;
   }
 `
 
 const LoginBackBox = styled.div`
   width: 40%;
-  margin: 30px auto;
+  height: auto;
+  margin: 0 auto;
   background-color: #393939;
   border: 0;
   border-radius: 5px;
@@ -21,43 +22,15 @@ const LoginBackBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 150px;
-  margin-bottom: 100px;
-
-  .select {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin-bottom: 20px;
-    font-size: 27px;
-    border-bottom: 3px solid #0278f6;
-    position: relative;
-
-    cursor: pointer;
-
-    .text {
-      flex: 50%;
-      text-align: center;
-      padding: 35px 0;
-      color: #bbbbbb;
-    }
-
-    .text:nth-child(1) {
-      border-right: 1px solid #0278f6;
-    }
-
-    text:nth-child(2) {
-      border-left: 1px solid #0278f6;
-    }
-  }
+  align-items: center;
 
   .item {
     width: 90%;
     margin: 0 auto;
     padding: 20px;
-    margin-bottom: 2px;
+    margin-bottom: 15px;
     color: #bbbbbb;
-
+    
     display: flex; 
     flex-direction: row;
     align-items: center;
@@ -120,7 +93,7 @@ const SignUpBackBox = styled.div`
 
   .item {
     padding: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     color: #bbbbbb;
 
     display: flex; 

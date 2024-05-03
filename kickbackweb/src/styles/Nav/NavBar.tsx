@@ -5,7 +5,6 @@ const Hme = styled.div`
     height: auto;
     background-color: #252428;
     color: white;
-    position: relative;
     position: sticky;
     top: -60px;
     z-index: 11;

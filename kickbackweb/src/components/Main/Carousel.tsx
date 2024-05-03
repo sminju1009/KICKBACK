@@ -176,7 +176,10 @@ const Carousel = () => {
             </div>
           </UserBox> :
             <form className='content' onSubmit={Login}>
-              <div className='text'>KICKBACK 로그인</div>
+              <div className='text'>
+                <div className='kick'>KICKBACK 로그인</div>
+                <div className='back' onClick={() => navigate("/signup")}>회원가입 »</div>
+              </div>
               <div className='con'>
                 <div className='con1'>
                   <InputTag>

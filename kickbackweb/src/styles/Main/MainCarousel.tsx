@@ -168,9 +168,28 @@ const LoginBox = styled.div`
       flex-direction: column;
 
       .text{
-        font-size: 40px;
-        color: #d1d1d1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         margin-bottom: 20px;
+        align-items: center;
+
+        .kick {
+          flex: 80%;
+          font-size: 35px;
+          color: #818181;
+        }
+
+        .back {
+          flex: 20%;
+          font-size: 20px;
+          color: #7f7f7f;
+          cursor: pointer;
+          
+          &:hover {
+            color: white;
+          }
+        }
       }
 
       .con {
