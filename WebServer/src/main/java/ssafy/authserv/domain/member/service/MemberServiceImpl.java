@@ -10,7 +10,7 @@ import ssafy.authserv.domain.member.entity.Member;
 import ssafy.authserv.domain.member.exception.MemberErrorCode;
 import ssafy.authserv.domain.member.exception.MemberException;
 import ssafy.authserv.domain.member.repository.MemberRepository;
-import ssafy.authserv.domain.record.entity.SoccerRecord;
+//import ssafy.authserv.domain.record.entity.SoccerRecord;
 import ssafy.authserv.domain.record.service.RecordService;
 import ssafy.authserv.global.component.firebase.FirebaseService;
 import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
@@ -123,10 +123,17 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_USER));
         try {
-            String imageUrl = firebaseService.uploadImage(request.profileImage(), userId);
-            member.setNickname(request.nickname());
-            member.setProfileImage(imageUrl);
-            memberRepository.save(member);
+            if (request.profileImage() == null && request.nickname() == null)
+                throw new RuntimeException("바뀐 항목이 없습니다.");
+
+            if (request.profileImage() != null){
+                String imageUrl = firebaseService.uploadImage(request.profileImage(), userId);
+                member.setProfileImage(imageUrl);
+            }
+            if (request.nickname() != null){
+                member.setNickname(request.nickname());
+                memberRepository.save(member);
+            }
             return new MemberUpdateResponse(member.getNickname(), member.getProfileImage());
         } catch(IOException e) {
             log.info("== 업로드 실패: {}", e.toString());
