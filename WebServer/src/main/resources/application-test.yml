@@ -87,7 +87,7 @@ app:
   firebase-bucket: ENC(rKMT+PpnBXXJ6o5ZRQ8N0TPzAFPTl2r3VJmwK6LG0mpSdkhkQB4rNw==)
 #  secret-key: ENC(ZJKlMwQzv+rNy2K0FBOz7J+37FJ50DxlBfZqhJ95DAw=)
 
-#vault:
-#  uri: http://localhost:8200
-#  token: myroot
-#  keyPath: secret/data/kickback
+vault:
+  uri: http://localhost:8200
+  token: myroot
+  keyPath: secret/data/kickback

@@ -17,6 +17,7 @@ import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
 import ssafy.authserv.global.jwt.service.JwtTokenService;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
 //    }
 
     @Override
-    public void logout(String email) {
+    public void logout(String email) throws GeneralSecurityException {
         Optional<String> token = refreshTokenRepository.find(email);
 
         if (token.isEmpty()) {

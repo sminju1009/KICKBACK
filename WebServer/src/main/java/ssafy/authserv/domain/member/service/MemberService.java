@@ -3,6 +3,7 @@ package ssafy.authserv.domain.member.service;
 import ssafy.authserv.domain.member.dto.*;
 import ssafy.authserv.domain.member.entity.Member;
 
+import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 public interface MemberService {
@@ -16,7 +17,7 @@ public interface MemberService {
      *
      * @param email 로그아웃할 회원의 이메일
      */
-    void logout(String email);
+    void logout(String email) throws GeneralSecurityException;
 
     MemberInfo getMember(UUID memberId);
 

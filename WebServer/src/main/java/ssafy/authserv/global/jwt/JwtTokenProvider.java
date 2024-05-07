@@ -17,6 +17,8 @@ import ssafy.authserv.global.jwt.exception.JwtException;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,7 +36,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims()
                 .id(String.valueOf(member.getId()))
                 .add(CLAIM_EMAIL, member.getEmail())
-                .add(CLAIM_NICKNAME, member.getProfileImage())
+                .add(CLAIM_NICKNAME, member.getNickname())
                 .add(CLAIM_ROLE, member.getRole())
                 .build();
 
