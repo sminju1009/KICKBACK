@@ -1,6 +1,7 @@
 package ssafy.authserv.domain.community.board.dto.requestdto;
 
 import lombok.Getter;
+import ssafy.authserv.domain.community.board.entity.BoardCategory;
 
 import java.time.LocalDateTime;
 
