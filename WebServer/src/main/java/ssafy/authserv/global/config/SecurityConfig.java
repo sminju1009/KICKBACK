@@ -106,7 +106,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        List<String> allowedOrigins = Arrays.asList("http://localhost:3000", "http://localhost:5173");
+        List<String> allowedOrigins = Arrays.asList("http://k10c209.p.ssafy.io:3000", "http://k10c209.p.ssafy.io:5173", "https://k10c209.p.ssafy.io:3000");
 
 //        configuration.setAllowedOrigins(allowedOrigins);
         configuration.addAllowedOriginPattern("*");
