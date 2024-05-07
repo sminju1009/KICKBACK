@@ -8,6 +8,11 @@ import java.time.LocalDateTime;
 public class BoardRequestDto {
     private String title;
     private String content;
-    private LocalDateTime updatedDate;
-    private LocalDateTime createdDate;
+    private String category;
+
+    public BoardCategory getCategory() {
+        return BoardCategory.fromName(this.category);
+    }
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 }
