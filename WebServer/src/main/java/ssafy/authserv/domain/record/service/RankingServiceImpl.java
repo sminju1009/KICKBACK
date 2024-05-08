@@ -61,7 +61,7 @@ public class RankingServiceImpl implements RankingService {
 
         return rankings.map(ranking -> {
             long rank = rankCounter.getAndIncrement();
-            return SpeedRankingInfo.convertToDTO(ranking.getMember(), rankingUtils.millisToString(ranking.getMillis()), rank);
+            return SpeedRankingInfo.convertToDTO(ranking.getMember(), rankingUtils.millisToString(ranking.getMillis()), rank+1);
         });
     }
 

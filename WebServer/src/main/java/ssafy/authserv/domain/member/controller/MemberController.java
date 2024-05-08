@@ -9,24 +9,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ssafy.authserv.domain.member.dto.*;
 import ssafy.authserv.domain.member.entity.Member;
 import ssafy.authserv.domain.member.service.MemberService;
 import ssafy.authserv.domain.record.service.RecordService;
 import ssafy.authserv.global.common.dto.Message;
-import ssafy.authserv.global.component.firebase.FirebaseService;
 import ssafy.authserv.global.jwt.dto.ReissueAccessTokenRequest;
-import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
 import ssafy.authserv.global.jwt.service.JwtTokenService;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 @Tag(name="회원", description = "회원 관련 API")
@@ -172,7 +167,7 @@ public class MemberController {
             description = "refresh 토큰을 통해 access 토큰을 재발급합니다."
     )
     @PostMapping("/reissue/accessToken")
-    public ResponseEntity<Message<String>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request){
+    public ResponseEntity<Message<String>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request) throws GeneralSecurityException {
         String reissuedAccessToken = jwtTokenService.reissueAccessToken(request.email());
         return ResponseEntity.ok().body(Message.success(reissuedAccessToken));
     }

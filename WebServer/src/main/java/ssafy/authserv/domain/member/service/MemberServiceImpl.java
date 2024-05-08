@@ -123,17 +123,23 @@ public class MemberServiceImpl implements MemberService {
     public MemberUpdateResponse updateProfile(UUID userId, MemberUpdateRequest request) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_USER));
+        boolean isNickNameExists = false;
         try {
-            if (request.profileImage() == null && request.nickname() == null)
-                throw new RuntimeException("바뀐 항목이 없습니다.");
+            if (request.profileImage() == null && request.nickname() == null){throw new MemberException(MemberErrorCode.UNCHANGED_MEMBER_PROFILE);}
 
             if (request.profileImage() != null){
                 String imageUrl = firebaseService.uploadImage(request.profileImage(), userId);
                 member.setProfileImage(imageUrl);
             }
             if (request.nickname() != null){
+                if (isNicknameDuplicated(request.nickname())) {
+                    isNickNameExists = true;
+                }
                 member.setNickname(request.nickname());
-                memberRepository.save(member);
+            }
+            memberRepository.save(member);
+            if (isNickNameExists){
+                throw new MemberException(MemberErrorCode.EXIST_USER_NICKNAME);
             }
             return new MemberUpdateResponse(member.getNickname(), member.getProfileImage());
         } catch(IOException e) {
