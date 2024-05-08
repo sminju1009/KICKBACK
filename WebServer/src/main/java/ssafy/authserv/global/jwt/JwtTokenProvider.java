@@ -51,7 +51,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .claims(claims)
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + expiration.toMinutes()))
+                .expiration(new Date(now.getTime() + expiration.toMillis()))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
     }
