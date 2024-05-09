@@ -1,104 +1,4 @@
 import styled from "styled-components";
-import img from "../../assets/carouselnav.png"
-
-const CarouselContainer = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  height: 500px;
-  overflow: hidden;
-  position: relative;
-`;
-
-const SlideContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 600px;
-`;
-
-const Slide = styled.div`
-  flex: 0 0 auto;
-  width: 100%;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 600px;
-`;
-
-const LeftArrow = styled.button`
-  font-size: 40px;
-  color: #ffffff;
-  cursor: ${({ disabled }) => disabled ? '' : 'pointer'};
-  background-color: transparent;
-  border: 0;
-`;
-
-const RightArrow = styled.button`
-  font-size: 40px;
-  color: #ffffff;
-  cursor: ${({ disabled }) => disabled ? '' : 'pointer'};
-  background-color: transparent;
-  border: 0;
-`;
-
-const CadBox = styled.div`
-  width: 100%;
-  height: auto;
-  position: relative;
-`
-
-const InBox = styled.div`
-  width: 100%;
-  height: 74px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top:-74px;
-  
-  background-image: url(${img});
-  background-size: cover;
-  background-repeat: no-repeat;
-  .item {
-    flex: 1;
-  }
-
-  .item:nth-child(1) {
-    flex: 10%;
-    text-align: end;
-    margin-top: 10px;
-  }
-
-  .item:nth-child(2) {
-    flex: 30%;
-  }
-
-  .item:nth-child(3) {
-    flex: 20;
-    position: relative;
-    
-    img {
-      position: absolute;
-      top: -30px;
-      left: 10%;
-      width: 200px;
-      height: 200px;
-      cursor: pointer;
-      border: 5px solid #151515;
-      border-radius: 1000px;
-    }
-  }
-
-  .item:nth-child(4) {
-    flex: 30%;
-  }
-
-  .item:nth-child(5) {
-    flex: 10%;
-    text-align: start;
-    margin-top: 10px;
-  }
-`
 
 const LoginBox = styled.div`
   width: 100%;
@@ -147,17 +47,17 @@ const LoginBox = styled.div`
         height: 90%;
         display: flex;
         flex-direction: column;
-        justify-content: end;
+        justify-content: center;
 
         .main {
           font-size: 35px;
           margin-bottom: 10px;
-          color: #d1d1d1;
+          color: #818181;
         }
 
         .text {
           font-size: 25px;
-          color: #818181;
+          color: #d5d5d5;
         }
       }
     }
@@ -168,9 +68,28 @@ const LoginBox = styled.div`
       flex-direction: column;
 
       .text{
-        font-size: 40px;
-        color: #d1d1d1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         margin-bottom: 20px;
+        align-items: center;
+
+        .kick {
+          flex: 80%;
+          font-size: 35px;
+          color: #818181;
+        }
+
+        .back {
+          flex: 20%;
+          font-size: 20px;
+          color: #7f7f7f;
+          cursor: pointer;
+          
+          &:hover {
+            color: white;
+          }
+        }
       }
 
       .con {
@@ -350,4 +269,4 @@ const UserBox = styled.div`
   }
 `
 
-export {CarouselContainer,SlideContainer,Slide,Image, LeftArrow, RightArrow, CadBox, InBox, LoginBox,TopBox, InputTag, UserBox}
+export { LoginBox,TopBox, InputTag, UserBox}

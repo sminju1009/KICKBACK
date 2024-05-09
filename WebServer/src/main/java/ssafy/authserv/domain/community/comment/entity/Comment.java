@@ -23,7 +23,7 @@ public class Comment extends CommentTime{
     private Member member;
 
     @Column(nullable = false)
-    private String commentContent;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE) // 연관된 board가 삭제되면 같이 삭제됨.

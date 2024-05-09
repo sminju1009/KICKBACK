@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { CarouselContainer, SlideContainer, Slide, Image, LeftArrow, RightArrow, CadBox, InBox, LoginBox, TopBox, InputTag, UserBox } from '../../styles/Main/MainCarousel';
-import caroueslImg1 from "../../assets/carousel1.png"
-import caroueslImg2 from "../../assets/carousel2.png"
-import caroueslImg3 from "../../assets/carousel3.png"
+import React, { useState } from 'react';
+import {LoginBox, TopBox, InputTag, UserBox } from '../../styles/Main/MainCarousel';
 import downloadBtn from "../../assets/downloadBtn.png"
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../config/Firebase.js";
@@ -14,9 +11,9 @@ import useAuthStore from '../../stores/AuthStore';
 import { useNavigate } from 'react-router';
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
+import Images from './Images';
 
 const Carousel = () => {
-  const [currentImage, setCurrentImage] = useState<number>(0);
   const handleDownload = () => {
 
     if (!isLogin) {
@@ -43,29 +40,6 @@ const Carousel = () => {
       .catch((error) => {
         console.error('Error downloading the file:', error);
       });
-  };
-
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const images = [
-    caroueslImg1,
-    caroueslImg2,
-    caroueslImg3
-  ]
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      goToNextSlide();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [currentSlide]);
-
-  const goToNextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
-  };
-
-  const goToPreviousSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide === 0 ? images.length - 1 : prevSlide - 1));
   };
 
   const [email, setEmail] = useState("");
@@ -120,36 +94,8 @@ const Carousel = () => {
 
   return (
     <TopBox>
-      <CarouselContainer>
-        <SlideContainer
-          style={{
-            transform: `translateX(-${currentSlide * 100}%)`,
-            // transition: "opacity 1.5s ease-in-out"
-          }}
-        >
-          {images.map((image, index) => {
-            return (
-              <Slide key={index} style={{
-                opacity: index === currentSlide ? 1 : 0.7,
-                transition: "opacity 1.5s ease-in-out"
-              }}>
-                <Image src={image} alt={`Slide ${index}`} />
-              </Slide>
-            )
-          })}
-        </SlideContainer>
-      </CarouselContainer>
-      <CadBox>
-        <InBox>
-          <LeftArrow onClick={goToPreviousSlide} className='item'>&lt;</LeftArrow>
-          <div className='item'></div>
-          <div className='item'>
-            <img src={downloadBtn} alt="다운로드 버튼" onClick={handleDownload} />
-          </div>
-          <div className='item'></div>
-          <RightArrow onClick={goToNextSlide} className='item'>&gt;</RightArrow>
-        </InBox>
-      </CadBox>
+      <Images handleDownload={handleDownload} />
+      
       <LoginBox>
         <div className='item'>
           <div className='content'>
@@ -170,13 +116,16 @@ const Carousel = () => {
                 <div>{nickname}</div>
                 <div className='logout' onClick={logout}>로그아웃</div>
               </div>
-              <div className='text1'>
+              <div className='text1' onClick={() => navigate(`/mypage/${nickname}`)}>
                 마이페이지
               </div>
             </div>
           </UserBox> :
             <form className='content' onSubmit={Login}>
-              <div className='text'>KICKBACK 로그인</div>
+              <div className='text'>
+                <div className='kick'>KICKBACK 로그인</div>
+                <div className='back' onClick={() => navigate("/signup")}>회원가입 »</div>
+              </div>
               <div className='con'>
                 <div className='con1'>
                   <InputTag>

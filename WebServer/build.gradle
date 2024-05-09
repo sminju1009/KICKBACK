@@ -62,6 +62,9 @@ dependencies {
      // Email 문의
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // Vault
+    implementation group: 'org.springframework.vault', name: 'spring-vault-core', version: '3.1.1'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

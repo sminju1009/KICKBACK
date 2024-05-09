@@ -8,5 +8,7 @@ import java.time.LocalDateTime;
 public class BoardModifyRequestDto {
     private String title;
     private String content;
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
+    private String category;
+
 }

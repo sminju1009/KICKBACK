@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 public class CommentTime {
 
     @CreatedDate
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedTime;
+    private LocalDateTime updatedAt;
 }

@@ -13,6 +13,8 @@ import ssafy.authserv.global.jwt.JwtTokenProvider;
 import ssafy.authserv.global.jwt.dto.JwtToken;
 import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
 
+import java.security.GeneralSecurityException;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public String reissueAccessToken(String email) {
+    public String reissueAccessToken(String email) throws GeneralSecurityException {
         String refreshToken = refreshTokenRepository.find(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.REDIS_NOT_TOKEN));
 

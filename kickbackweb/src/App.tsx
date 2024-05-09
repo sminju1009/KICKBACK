@@ -10,6 +10,10 @@ import Community from "./routes/Community";
 import CreateCommunity from "./components/Community/CreateCommunity";
 import CommunityDetail from "./components/Community/CommunityDetail";
 import UpdateCommunity from "./components/Community/UpdateCommunity";
+import GameIntro from "./routes/GameIntro";
+import ModeIntro from "./routes/ModeIntro";
+import ControlIntro from "./routes/ControlIntro";
+import MyPage from "./routes/MyPage";
 
 function App() {
   return (
@@ -19,14 +23,18 @@ function App() {
         <Route path="/" element={<Main />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/community" element={<Community />}></Route>
-        <Route path="/community/:id" element={<CommunityDetail />}></Route>
+        <Route path="/community/:type" element={<Community />} />
+        <Route path="/community/Article/:id" element={<CommunityDetail />}></Route>
         <Route
           path="/community/update/:id"
           element={<UpdateCommunity />}
         ></Route>
         <Route path="/community/create" element={<CreateCommunity />}></Route>
         <Route path="/rank/speed" element={<RankSpeed />}></Route>
+        <Route path="/intro/game" element={<GameIntro />}></Route>
+        <Route path="/intro/mode" element={<ModeIntro />}></Route>
+        <Route path="/intro/control" element={<ControlIntro />}></Route>
+        <Route path="/mypage/:nickname" element={<MyPage />}></Route>
       </Routes>
       <Footer />
     </BrowserRouter>

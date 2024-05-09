@@ -2,13 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MenuBox, Hme, LogoImg } from "../../styles/Nav/NavBar";
 import appLogo from "../../assets/logo3.png";
-import { PiPowerBold } from "react-icons/pi";
 import useAuthStore from "../../stores/AuthStore";
 import { useShallow } from "zustand/react/shallow";
 import useUserStore from "../../stores/UserStore";
-import { Fade } from "react-awesome-reveal";
-import { GoPerson } from "react-icons/go";
-import { IoIosLogOut } from "react-icons/io";
 
 const NaviBar = () => {
   const navigate = useNavigate();
@@ -34,14 +30,21 @@ const NaviBar = () => {
 
   return (
     <>
-      <Hme>
-        <div className="top">
-          <LogoImg
-            src={appLogo}
-            alt="앱 로고"
-            onClick={() => navigate("/")}
-          />
-        </div>
+      <LogoImg>
+        <img src={appLogo} alt="로고" onClick={() => navigate("/")} />
+      </LogoImg>
+      {isList ? (
+        <div
+          style={{
+            height: "60px",
+            zIndex: "1000",
+            backgroundColor: "white",
+          }}
+        ></div>
+      ) : (
+        <span></span>
+      )}
+      <Hme className={isList === true ? "active" : ""}>
         <MenuBox>
           <div
             className="item"
@@ -55,10 +58,11 @@ const NaviBar = () => {
           </div>
         </MenuBox>
         {isList ? (
-          <Fade>
+          <>
             <MenuBox
               onMouseEnter={() => setIsList(true)}
               onMouseLeave={() => setIsList(false)}
+              className="active"
             >
               <div className="item">
                 <div className="content">
@@ -66,28 +70,36 @@ const NaviBar = () => {
                   <div className="text">업데이트</div>
                 </div>
                 <div className="content">
-                  <div className="text">아이템 전</div>
                   <div className="text" onClick={() => navigate("/rank/speed")}>
                     스피드 전
                   </div>
-                  <div className="text">축구 모드</div>
+                  <div className="text">아이템 전<span>comming soon!</span></div>
+                  <div className="text">축구 모드<span>comming soon!</span></div>
                 </div>
                 <div className="content">
-                  <div className="text">게임 소개</div>
-                  <div className="text">모드 소개</div>
-                  <div className="text">조작법</div>
+                  <div className="text" onClick={() => navigate("/intro/game")}>
+                    게임 소개
+                  </div>
+                  <div className="text" onClick={() => navigate("/intro/mode")}>
+                    모드 소개
+                  </div>
+                  <div
+                    className="text"
+                    onClick={() => navigate("/intro/control")}
+                  >
+                    조작법
+                  </div>
                 </div>
                 <div className="content">
-                  <div className="text" onClick={() => navigate("/community")}>
+                  <div className="text" onClick={() => navigate("/community/Article")}>
                     자유 게시판
                   </div>
-                  <div className="text">공유 게시판</div>
-                  <div className="text">Q & A</div>
+                  <div className="text" onClick={() => navigate("/community/QnA")}>Q & A</div>
                 </div>
               </div>
             </MenuBox>
-          </Fade>
-        ) : null}
+          </>
+        ) : null} 
       </Hme>
     </>
   );

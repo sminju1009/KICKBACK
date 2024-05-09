@@ -3,10 +3,15 @@ import styled from "styled-components";
 const ModeText = styled.div`
   width: 90%;
   margin: 0 auto;
-  font-size: 50px;
-  color: #000000;
   margin-bottom: 10px;
-  margin-top: 50px;
+  font-size: 35px;
+  padding-top: 30px;
+
+  span {
+    font-size: 25px;
+    font-style: italic;
+    color: #a5a5a5;
+  }
 `
 
 const ModeBox = styled.div`
@@ -47,7 +52,51 @@ const Mode = styled.div`
     font-size: 50px;
     font-style: italic;
   }
+
+  .abs-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(53, 53, 53, 0.5);
+    width: 98%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: white;
+  }
 `
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-export {ModeText, ModeBox, Mode};
+  .video-box {
+    width: 60%;
+    margin: 0 auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+
+    .text {
+      text-align: end;
+      font-size: 35px;
+      color: white;
+    }
+  }
+`
+
+export {ModeText, ModeBox, Mode, Modal};
