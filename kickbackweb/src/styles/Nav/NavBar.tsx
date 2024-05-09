@@ -64,10 +64,21 @@ const MenuBox = styled.div`
         cursor: pointer;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
         font-weight: 100;
+        position: relative;
 
         &:hover {
           color: white;
           text-decoration: underline;
+        }
+
+        span {
+          position: absolute;
+          top: 18px;
+          left: 0;
+          right: 0;
+          font-size: 10px;
+          color: #cdcdcd;
+          font-style: italic;
         }
       }
     }
@@ -92,13 +103,13 @@ const MenuBox = styled.div`
 const LogoImg = styled.div`
   width: 100%;
   height: 80px;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
 
   img {
     width: 15%;
+    cursor: pointer;
   }
 `;
 

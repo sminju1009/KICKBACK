@@ -21,11 +21,13 @@ import ssafy.authserv.domain.member.service.MemberService;
 import ssafy.authserv.domain.record.service.RecordService;
 import ssafy.authserv.global.common.dto.Message;
 import ssafy.authserv.global.component.firebase.FirebaseService;
+import ssafy.authserv.global.jwt.dto.ReissueAccessTokenRequest;
 import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
 import ssafy.authserv.global.jwt.service.JwtTokenService;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @Tag(name="회원", description = "회원 관련 API")
 @RestController
@@ -82,16 +84,16 @@ public class MemberController {
 //        accessTokenCookie.setSecure(true); // HTTPS를 통해서만 쿠키 전송
         response.addCookie(accessTokenCookie);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", loginResponse.jwtToken().refreshToken());
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60); // 1주일
-        refreshTokenCookie.setHttpOnly(true);
-//        refreshTokenCookie.setSecure(true);
-        response.addCookie(refreshTokenCookie);
+//        Cookie refreshTokenCookie = new Cookie("refreshToken", loginResponse.jwtToken().refreshToken());
+//        refreshTokenCookie.setPath("/");
+//        refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60); // 1주일
+//        refreshTokenCookie.setHttpOnly(true);
+////        refreshTokenCookie.setSecure(true);
+//        response.addCookie(refreshTokenCookie);
 
         response.addHeader("accessToken", loginResponse.jwtToken().accessToken());
-        response.addHeader("refreshToken",
-                loginResponse.jwtToken().refreshToken());
+//        response.addHeader("refreshToken",
+//                loginResponse.jwtToken().refreshToken());
         return ResponseEntity.ok()
 //                .header("accessToken", loginResponse.jwtToken().accessToken())
 //                .header("refreshToken",
@@ -167,11 +169,11 @@ public class MemberController {
      */
     @Operation(
             summary = "access 토큰 재발급",
-            description ="memberEmail을 통해 access 토큰을 재발급합니다."
+            description = "refresh 토큰을 통해 access 토큰을 재발급합니다."
     )
-    @PostMapping("/reissue/accessToken/{memberEmail}")
-    public ResponseEntity<Message<String>> reissueAccessToken(@PathVariable String memberEmail) {
-        String reissuedAccessToken = jwtTokenService.reissueAccessToken(memberEmail);
+    @PostMapping("/reissue/accessToken")
+    public ResponseEntity<Message<String>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request){
+        String reissuedAccessToken = jwtTokenService.reissueAccessToken(request.email());
         return ResponseEntity.ok().body(Message.success(reissuedAccessToken));
     }
 
