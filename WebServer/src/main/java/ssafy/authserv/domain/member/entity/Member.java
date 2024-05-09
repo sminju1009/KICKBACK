@@ -3,8 +3,10 @@ package ssafy.authserv.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 //import ssafy.authserv.domain.friendship.entity.Friendship;
+import ssafy.authserv.domain.friendship.entity.Friendship;
 import ssafy.authserv.domain.member.entity.enums.MemberRole;
 //import ssafy.authserv.domain.record.entity.SoccerRecord;
+import ssafy.authserv.domain.record.entity.SoccerRecord;
 import ssafy.authserv.domain.record.entity.SpeedRecord;
 
 
@@ -48,24 +50,17 @@ public class Member {
     private String profileImage; // 프로필 이미지 URL 혹은 경로를 저장
 
     /** 친구 관련 필드 */
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true) // Member가 삭제될 때 관련된 모든 Friendship을 삭제
-//    private Set<Friendship> friendships = new HashSet<>();
-//    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true) // Member를 참조하는 Friendships를 삭제
-//    private Set<Friendship> friendFriendships = new HashSet<>();
-
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Friendship> friendships = new HashSet<>();
-
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Friendship> receiverFriendships = new HashSet<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true) // Member가 삭제될 때 관련된 모든 Friendship을 삭제
+    private Set<Friendship> friendships = new HashSet<>();
+    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true) // Member를 참조하는 Friendships를 삭제
+    private Set<Friendship> friendFriendships = new HashSet<>();
 
     /** 레코드(기록) 관련 필드 */
-//    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    SoccerRecord soccerRecord;
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    SoccerRecord soccerRecord;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<SpeedRecord> speedRecord;
 
-
-    public void updatePassword(String password) {this.password = password; }
+//    public void updatePassword(String password) {this.password = password; }
 }

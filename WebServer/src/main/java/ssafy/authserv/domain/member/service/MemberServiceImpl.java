@@ -170,7 +170,7 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberException(MemberErrorCode.PASSWORD_CONFIRMATION_MISMATCH);
         }
 
-        member.updatePassword(passwordEncoder.encode(request.updatedPassword()));
+        member.setPassword(passwordEncoder.encode(request.updatedPassword()));
     }
 
     @Override
