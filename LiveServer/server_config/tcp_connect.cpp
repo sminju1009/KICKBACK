@@ -1,8 +1,9 @@
+#include <iostream>
 #include <vector>
 #include <boost/bind/bind.hpp>
 #include <boost/asio.hpp>
-#include "packet.cpp"
-#include "message_handler.cpp"
+
+#include "message_handler.h"
 
 using boost::asio::ip::tcp;
 
@@ -17,29 +18,12 @@ public:
                                                boost::asio::placeholders::error));
     }
 
-private:
-    void handle_connect(const boost::system::error_code &error) {
-        if (!error) {
-            std::string message = "{userName: \"LIVESERVER\"}\n";
-
-            msgpack::sbuffer buffer = packet::packing(message);
-
-            boost::asio::async_write(socket_,
-                                     boost::asio::buffer(buffer.data(), buffer.size()),
-                                     boost::bind(&tcp_connect::handle_write, this,
-                                                 boost::asio::placeholders::error,
-                                                 boost::asio::placeholders::bytes_transferred));
-
-            read_message();
-        }
-    }
-
-    void handle_write(const boost::system::error_code &error, size_t) {
-        if (!error) {
-            std::cout << "send complete" << std::endl;
-        } else {
-            std::cout << error.message() << std::endl;
-        }
+    void write_message(msgpack::sbuffer &buffer) {
+        boost::asio::async_write(socket_,
+                                 boost::asio::buffer(buffer.data(), buffer.size()),
+                                 boost::bind(&tcp_connect::handle_write_message, this,
+                                             boost::asio::placeholders::error,
+                                             boost::asio::placeholders::bytes_transferred));
     }
 
     void read_message() {
@@ -49,21 +33,38 @@ private:
                                             boost::asio::placeholders::bytes_transferred));
     }
 
+private:
+    void handle_connect(const boost::system::error_code &error) {
+        if (!error) {
+            // 비즈니스 서버 최초 접속시 라이브 서버 확인용 메시지
+            msgpack::sbuffer buffer;
+            msgpack::packer<msgpack::sbuffer> packer(&buffer);
+
+            packer.pack_array(3);
+
+            packer.pack(0);
+            packer.pack(std::string("LiveServer"));
+            packer.pack(std::string("\n"));
+
+            write_message(buffer);
+            read_message();
+        }
+    }
+
+    void handle_write_message(const boost::system::error_code &error, size_t) {
+        if (!error) {
+            std::cout << "send complete" << std::endl;
+        } else {
+            std::cout << error.message() << std::endl;
+        }
+    }
+
     void handle_read_message(const boost::system::error_code& error, size_t bytes_transferred) {
         if (!error)
         {
-//            std::cout << "why??" << std::endl;
-            msgpack::object_handle oh =
-                    msgpack::unpack(data_, bytes_transferred);
-
+            msgpack::object_handle oh = msgpack::unpack(data_, bytes_transferred);
             msgpack::object deserialized = oh.get();
-
-            message_handler::command(deserialized);
-
-//            std::string str;
-//            deserialized.convert(str);
-//
-//            std::cout << str << std::endl;
+            MessageHandler::command(deserialized);
         }
         else
         {
