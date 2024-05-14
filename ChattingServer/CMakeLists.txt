@@ -31,6 +31,12 @@ find_package(Threads REQUIRED)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
+        src/server_config/chat_server.cpp
+        src/channel/channel_list.cpp
+        src/channel/channel.cpp
+        src/session/chat_session.cpp
+        src/message/message_unit.cpp
+        src/message/message.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include)
