@@ -33,7 +33,7 @@ int main() {
 
         // ==============================UDP==============================
         // UDP 소켓 설정 초기화
-        ConnectionInfoUDP::getInstance().init(io_context_udp, 1234);
+        ConnectionInfoUDP::getInstance().init(io_context_udp, 5058);
 
         // 수신 및 처리 객체
         Receiver receiver;
