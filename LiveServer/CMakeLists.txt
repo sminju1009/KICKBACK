@@ -57,7 +57,7 @@
 #target_link_libraries(src_live_server ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # Mac
-cmake_minimum_required(VERSION 3.28.1)
+cmake_minimum_required(VERSION 3.11)
 project(
         LiveServer
         VERSION 0.1
