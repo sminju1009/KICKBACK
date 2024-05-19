@@ -33,7 +33,7 @@ public class MessageUnPacker {
                 case JOIN:
                     ChannelHandler.joinChannel(unpacker);
                     break;
-                case LEVAE:
+                case LEAVE:
                     ChannelHandler.leaveChannel(unpacker);
                     break;
                 case READY:
@@ -48,7 +48,7 @@ public class MessageUnPacker {
                 case END:
                     ChannelHandler.endGame(unpacker);
                     break;
-                case Map:
+                case MAP:
                     ChannelHandler.changeMap(unpacker);
                     break;
                 case TEAMCHANGE:
