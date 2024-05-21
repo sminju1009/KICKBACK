@@ -73,9 +73,9 @@ public class ChannelHandler {
             int countOfOne = (int) teamColor.stream().filter(color -> color == 1).count();
 
             if (countOfZero < countOfOne) {
-                teamColor.set(channel.getChannelUserList().indexOf(userName),0);
+                teamColor.set(channel.getChannelUserList().indexOf(userName), 0);
             } else {
-                teamColor.set(channel.getChannelUserList().indexOf(userName),1);
+                teamColor.set(channel.getChannelUserList().indexOf(userName), 1);
             }
         }
 
@@ -134,36 +134,26 @@ public class ChannelHandler {
         Channel channel = Channels.getChannel("GameChannel" + channelIdx);
 
         if (gameMode.equals("soccer")) {
-            List<Integer> team =  channel.getTeamColor();
+            List<Integer> team = channel.getTeamColor();
             long countOfZero = team.stream() // 스트림 생성
                     .filter(color -> color == 0) // 0인 요소만 필터링
                     .count(); // 필터링된 요소들의 개수를 센다
 
-            if (channel.getChannelUserList().size()%2 == 0 && countOfZero != channel.getChannelUserList().size()/2) {
+            if (channel.getChannelUserList().size() % 2 == 0 && countOfZero != channel.getChannelUserList().size() / 2) {
                 Broadcast.broadcastMessage(channel, ResponseToMsgPack.errorToMsgPack("팀 밸런스가 맞지 않습니다! 팀을 변경해주세요.")).subscribe();
             } else {
-                // 모두 레디 상태인지 확인
-                if (channel.isAllReady()) {
-                    // 게임 중으로 변경
-                    channel.gameStart();
-                    Broadcast.broadcastLiveServer(BusinessToLive.packing(Type.START.ordinal(), channelIdx)).subscribe();
-                    Broadcast.broadcastMessage(lobby, ResponseToMsgPack.lobbyChannelToMsgPack()).subscribe();
-                    Broadcast.broadcastMessage(channel, ResponseToMsgPack.gameChannelInfoToMsgPack(channelIdx)).subscribe();
-                } else {
-                    Broadcast.broadcastMessage(channel, ResponseToMsgPack.errorToMsgPack("모든 유저가 준비되지 않았습니다!")).subscribe();
-                }
-            }
-        } else {
-            // 모두 레디 상태인지 확인
-            if (channel.isAllReady()) {
                 // 게임 중으로 변경
                 channel.gameStart();
                 Broadcast.broadcastLiveServer(BusinessToLive.packing(Type.START.ordinal(), channelIdx)).subscribe();
                 Broadcast.broadcastMessage(lobby, ResponseToMsgPack.lobbyChannelToMsgPack()).subscribe();
                 Broadcast.broadcastMessage(channel, ResponseToMsgPack.gameChannelInfoToMsgPack(channelIdx)).subscribe();
-            } else {
-                Broadcast.broadcastMessage(channel, ResponseToMsgPack.errorToMsgPack("모든 유저가 준비되지 않았습니다!")).subscribe();
             }
+        } else {
+            // 게임 중으로 변경
+            channel.gameStart();
+            Broadcast.broadcastLiveServer(BusinessToLive.packing(Type.START.ordinal(), channelIdx)).subscribe();
+            Broadcast.broadcastMessage(lobby, ResponseToMsgPack.lobbyChannelToMsgPack()).subscribe();
+            Broadcast.broadcastMessage(channel, ResponseToMsgPack.gameChannelInfoToMsgPack(channelIdx)).subscribe();
         }
     }
 
