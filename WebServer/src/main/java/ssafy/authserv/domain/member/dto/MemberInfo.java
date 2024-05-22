@@ -7,6 +7,7 @@ import java.util.UUID;
 
 @Builder
 public record MemberInfo(
+        UUID id,
         String email,
         MemberRole role,
         String nickname,

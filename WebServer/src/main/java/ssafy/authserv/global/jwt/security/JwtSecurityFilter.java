@@ -76,12 +76,12 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                     throw new JwtException(JwtErrorCode.INVALID_CLAIMS);
                 } else {
                     log.info("회원 ID : {} - 요청 시도: ", member.id());
-                    if (isBlockedAccessToken(member.email(), accessToken)) {
+                    if (jwtTokenProvider.isBlockedAccessToken(member.email(), accessToken)) {
                         throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
                     }
                 }
                 SecurityContextHolder.getContext()
-                        .setAuthentication(createAuthenticationToken(member));
+                        .setAuthentication(jwtTokenProvider.createAuthenticationToken(member));
             } catch (JwtException e) {
                 SecurityContextHolder.clearContext();
                 log.info("JWT 검증 실패: {}", e.getErrorCode().getErrorMessage());
@@ -126,18 +126,5 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
             }
         }
         return null;
-    }
-
-    // 인증된 사용자 정보를 담는 JwtAuthentication 객체를 생성합니다.
-    private JwtAuthenticationToken createAuthenticationToken(MemberLoginActive user) {
-        return new JwtAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(user.role().name())));
-        // List.of("a", "b", "c") -> [a, b, c]
-    }
-
-    // 전송된 accessToken이 새로운 로그인을 통해 만료되었는지 확인하기 위한 메서드입니다.
-    private boolean isBlockedAccessToken(String email, String token) {
-        List<String> blockedTokens = blockedAccessTokenService.findAllByEmail(email);
-        // 각 요소에 대해 equals 메서드를 사용하여 지정된 문자열과 완벽하게 일치하는지 비교합니다.
-        return blockedTokens.contains(token);
     }
 }

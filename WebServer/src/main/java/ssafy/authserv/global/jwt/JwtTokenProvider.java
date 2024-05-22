@@ -9,15 +9,19 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import ssafy.authserv.domain.member.entity.Member;
 import ssafy.authserv.domain.member.entity.enums.MemberRole;
 import ssafy.authserv.global.jwt.exception.JwtErrorCode;
 import ssafy.authserv.global.jwt.exception.JwtException;
+import ssafy.authserv.global.jwt.security.JwtAuthenticationToken;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
+import ssafy.authserv.global.jwt.service.BlockedAccessTokenService;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -25,6 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final JwtProps jwtProps;
+    private final BlockedAccessTokenService blockedAccessTokenService;
     private static final String CLAIM_EMAIL = "email";
     private static final String CLAIM_NICKNAME = "nickname";
     private static final String CLAIM_PROFILE_IMAGE = "profileImage";
@@ -97,5 +102,18 @@ public class JwtTokenProvider {
         }
     }
 
+
+    // 인증된 사용자 정보를 담는 JwtAuthentication 객체를 생성합니다.
+    public JwtAuthenticationToken createAuthenticationToken(MemberLoginActive user) {
+        return new JwtAuthenticationToken(user, "", List.of(new SimpleGrantedAuthority(user.role().name())));
+        // List.of("a", "b", "c") -> [a, b, c]
+    }
+
+    // 전송된 accessToken이 새로운 로그인을 통해 만료되었는지 확인하기 위한 메서드입니다.
+    public boolean isBlockedAccessToken(String email, String token) {
+        List<String> blockedTokens = blockedAccessTokenService.findAllByEmail(email);
+        // 각 요소에 대해 equals 메서드를 사용하여 지정된 문자열과 완벽하게 일치하는지 비교합니다.
+        return blockedTokens.contains(token);
+    }
 
 }

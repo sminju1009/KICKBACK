@@ -56,8 +56,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 //    // Kafka
-//    implementation 'org.springframework.kafka:spring-kafka'
-//    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
 
      // Email 문의
     implementation 'org.springframework.boot:spring-boot-starter-mail'
