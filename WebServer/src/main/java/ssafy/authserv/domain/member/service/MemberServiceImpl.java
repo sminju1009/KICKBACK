@@ -11,7 +11,9 @@ import ssafy.authserv.domain.member.exception.MemberErrorCode;
 import ssafy.authserv.domain.member.exception.MemberException;
 import ssafy.authserv.domain.member.repository.MemberRepository;
 import ssafy.authserv.global.component.firebase.FirebaseService;
+import ssafy.authserv.global.jwt.JwtTokenProvider;
 import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
+import ssafy.authserv.global.jwt.security.MemberLoginActive;
 import ssafy.authserv.global.jwt.service.BlockedAccessTokenService;
 import ssafy.authserv.global.jwt.service.JwtTokenService;
 
@@ -29,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BlockedAccessTokenService blockedAccessTokenService;
+    private final JwtTokenProvider jwtTokenProvider;
     @Override
     public Member signup(SignupRequest signupRequest) {
         if (memberRepository.existsByEmail(signupRequest.getEmail())) {
@@ -61,6 +64,7 @@ public class MemberServiceImpl implements MemberService {
         if (member.getCurrentToken() != null){
             blockedAccessTokenService.save(member.getEmail(), member.getCurrentToken());
         }
+        // 여기서  토큰 넣고 setAuthenticastion이거 하자
         LoginResponse loginResponse =  jwtTokenService.issueAndSaveTokens(member);
         member.setCurrentToken(loginResponse.jwtToken().accessToken());
         return loginResponse;

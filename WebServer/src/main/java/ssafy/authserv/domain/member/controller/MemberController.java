@@ -6,18 +6,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 import ssafy.authserv.domain.member.dto.*;
 import ssafy.authserv.domain.member.entity.Member;
 import ssafy.authserv.domain.member.service.MemberService;
 import ssafy.authserv.domain.record.service.RecordService;
 import ssafy.authserv.global.common.dto.Message;
+import ssafy.authserv.global.jwt.JwtTokenProvider;
 import ssafy.authserv.global.jwt.dto.ReissueAccessTokenRequest;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
 import ssafy.authserv.global.jwt.service.JwtTokenService;
@@ -31,6 +35,7 @@ import ssafy.authserv.global.jwt.service.JwtTokenService;
 public class MemberController {
     private final MemberService memberService;
     private final JwtTokenService jwtTokenService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final RecordService recordService;
 
     @Operation(
@@ -50,8 +55,22 @@ public class MemberController {
             description = "email과 password를 통해 로그인을 합니다."
     )
     @PostMapping("/login")
-    public ResponseEntity<Message<MemberInfo>> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<Message<MemberInfo>> login(@RequestBody LoginRequest request, HttpServletResponse response, HttpSession session) {
         LoginResponse loginResponse = memberService.login(request);
+
+        MemberLoginActive userDetails = new MemberLoginActive(
+                loginResponse.memberInfo().id(),
+                loginResponse.memberInfo().role(),
+                loginResponse.memberInfo().email(),
+                loginResponse.memberInfo().nickname(),
+                loginResponse.memberInfo().profileImage()
+        );
+        SecurityContextHolder.getContext()
+                .setAuthentication(jwtTokenProvider.createAuthenticationToken(userDetails));
+
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        log.info("됐나용: {}", session.toString());
 
 //        // JWT 토큰을 쿠키에 저장
         Cookie accessTokenCookie = new Cookie("accessToken", loginResponse.jwtToken().accessToken());

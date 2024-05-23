@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "friendships")
+@Table(name = "friendship")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
@@ -23,11 +23,11 @@ public class Friendship {
 
     // 따라서 필요하지 않은 데이터까지 즉시 로드되지 않도록 (성능을 위해) LAZY 로딩 설정
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id", referencedColumnName = "id")
+    @JoinColumn(name = "me_id", referencedColumnName = "id")
     private Member me;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", referencedColumnName = "id")
+    @JoinColumn(name = "friend_id", referencedColumnName = "id")
     private Member friend;
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,5 @@
 package ssafy.authserv.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +11,10 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -22,8 +23,6 @@ import ssafy.authserv.global.jwt.exception.JwtErrorCode;
 import ssafy.authserv.global.jwt.exception.JwtException;
 import ssafy.authserv.global.jwt.security.MemberLoginActive;
 
-import java.io.PrintWriter;
-import java.nio.file.AccessDeniedException;
 
 @Configuration
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:3000")
+        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002")
                 .withSockJS();
     }
 
@@ -57,36 +56,44 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String authToken = accessor.getFirstNativeHeader("Authorization");
-                    if (authToken != null) {
-                        // 그냥 Bearer prefix 쓰는게 좋은 듯...
-                        // prefix로 필터링 가능
-                        // 나중 프로젝트에서는 그렇게 적용하자
-                        if (authToken.startsWith("Bearer ")) {
-                            try {
-                                authToken = authToken.substring(7);
-                                MemberLoginActive member = jwtTokenProvider.resolveAccessToken(authToken);
 
-                                if (member != null) {
+                SecurityContext securityContext = (SecurityContext) accessor.getSessionAttributes().get(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 
-                                    if (jwtTokenProvider.isBlockedAccessToken(member.email(), authToken)) {
-                                        throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
-                                    }
-
-                                    SecurityContextHolder.getContext()
-                                            .setAuthentication(jwtTokenProvider.createAuthenticationToken(member));
-                                }
-                            } catch (JwtException e) {
-                                SecurityContextHolder.clearContext();
-                                log.info("JWT 검증 실패: {}", e.getErrorCode().getErrorMessage());
-
-//                                throw new AccessDeniedException("Failed to access");
-                                throw new JwtException(e.getErrorCode());
-                            }
-                        }
+                if (securityContext != null) {
+                    Authentication authentication = securityContext.getAuthentication();
+                    if (authentication != null && authentication.isAuthenticated()) {
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
+//                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+//                    String authToken = accessor.getFirstNativeHeader("Authorization");
+//                    if (authToken != null && authToken.startsWith("Bearer ")) {
+//                        // 그냥 Bearer prefix 쓰는게 좋은 듯...
+//                        // prefix로 필터링 가능
+//                        // 나중 프로젝트에서는 그렇게 적용하자
+//                        authToken = authToken.substring(7);
+//                        log.info("token: {}", authToken);
+//                        try {
+//                            MemberLoginActive member = jwtTokenProvider.resolveAccessToken(authToken);
+//
+//                            if (member != null) {
+//
+//                                if (jwtTokenProvider.isBlockedAccessToken(member.email(), authToken)) {
+//                                    throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
+//                                }
+//
+//                                SecurityContextHolder.getContext()
+//                                        .setAuthentication(jwtTokenProvider.createAuthenticationToken(member));
+//                            }
+//                        } catch (JwtException e) {
+//                            SecurityContextHolder.clearContext();
+//                            log.info("JWT 검증 실패: {}", e.getErrorCode().getErrorMessage());
+//
+////                                throw new AccessDeniedException("Failed to access");
+//                            throw new JwtException(e.getErrorCode());
+//                        }
+//                    }
+//                }
                 return message;
             }
         });

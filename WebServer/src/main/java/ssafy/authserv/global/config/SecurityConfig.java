@@ -101,7 +101,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        List<String> allowedOrigins = Arrays.asList("http://localhost:3000", "https://k10c209.p.ssafy.io");
+        List<String> allowedOrigins = Arrays.asList("http://localhost:3000", "https://k10c209.p.ssafy.io", "http://localhost:3001", "http://localhost:3002");
 
         // 허용된 출처 설정
         configuration.setAllowedOrigins(allowedOrigins);

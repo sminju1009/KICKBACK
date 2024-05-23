@@ -2,6 +2,7 @@ package ssafy.authserv.global.jwt.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import ssafy.authserv.domain.member.dto.LoginResponse;
 import ssafy.authserv.domain.member.dto.MemberInfo;
@@ -12,6 +13,7 @@ import ssafy.authserv.domain.member.repository.MemberRepository;
 import ssafy.authserv.global.jwt.JwtTokenProvider;
 import ssafy.authserv.global.jwt.dto.JwtToken;
 import ssafy.authserv.global.jwt.repository.RefreshTokenRepository;
+
 
 @Service
 @Slf4j
@@ -35,8 +37,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         }
 
         JwtToken jwtToken = new JwtToken(accessToken, refreshToken);
+
         MemberInfo memberInfo = MemberInfo.builder()
-//                .id(member.getId())
+                .id(member.getId())
                 .role(member.getRole())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
